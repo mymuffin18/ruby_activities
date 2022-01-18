@@ -9,3 +9,4 @@ end
 arr.each do |i|
     puts i
 end
+

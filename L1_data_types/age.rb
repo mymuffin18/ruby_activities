@@ -16,6 +16,6 @@ puts "How old are you?"
 
 age = gets.chomp.to_i
 
-for i in 1...5 do
+for i in 1..4 do
     puts "In #{i * 10} you will be: #{age + (i * 10)}"
 end

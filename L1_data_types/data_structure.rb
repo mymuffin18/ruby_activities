@@ -12,8 +12,12 @@ for i in 0...contact_data.length do
     obj[i] = {:email => contact_data[i][0], :address => contact_data[i][1], :phone => contact_data[i][2]}
 end
 
+
 contacts["John Cruz"] = obj[0]
 contacts["Avion School"] = obj[1]
+
+
+puts contacts
 
 
 # Expected output:
