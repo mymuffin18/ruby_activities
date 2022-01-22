@@ -29,7 +29,7 @@ module AdminPermisson
   
   end
   
-  class User
+  class User # base class
     
     def initialize(username, password, ip_address)
      @username = username
@@ -41,10 +41,13 @@ module AdminPermisson
         @password = new_password
         puts "Password changed!"
     end
+    
     protected
     def login
       puts "User logged in. IP address: #{@ip_address}"
     end
+
+
 
   end
   
@@ -68,6 +71,7 @@ module AdminPermisson
     def initialize(username, password, ip_address)
         super(username, password, ip_address)
     end
+    
     def buyer_login
         login
     end
