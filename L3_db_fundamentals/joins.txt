@@ -1,0 +1,31 @@
+CREATE TABLE classroms (id SERIAL PRIMARY KEY,
+						student_id INT REFERENCES students (id),
+						section CHAR(1));
+
+INSERT INTO classrooms (student_id, section) values (1, 'A');
+INSERT INTO classrooms (student_id, section) values (2, 'A');
+INSERT INTO classrooms (student_id, section) values (3, 'B');
+INSERT INTO classrooms (student_id, section) values (4, 'C');
+INSERT INTO classrooms (student_id, section) values (5, 'B');
+INSERT INTO classrooms (student_id, section) values (6, 'A');
+INSERT INTO classrooms (student_id, section) values (7, 'C');
+INSERT INTO classrooms (student_id, section) values (8, 'B');
+INSERT INTO classrooms (student_id, section) values (9, 'B');
+INSERT INTO classrooms (student_id, section) values (10, 'C');
+
+
+SELECT s.first_name, s.middle_name, s.last_name, s.age, s.location, c.section from students s
+INNER JOIN classrooms c
+ON s.id=c.student_id;
+
+Select s.first_name, s.middle_name, s.last_name, s.age, s.location, c.section from students s
+LEFT JOIN classrooms c
+ON s.id=c.student_id;
+
+Select s.first_name, s.middle_name, s.last_name, s.age, s.location, c.section from students s
+RIGHT JOIN classrooms c
+ON s.id=c.student_id;
+
+Select s.first_name, s.middle_name, s.last_name, s.age, s.location, c.section from students s
+FULL OUTER JOIN classrooms c
+ON s.id=c.student_id;
