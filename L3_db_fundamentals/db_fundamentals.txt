@@ -15,7 +15,7 @@ INSERT INTO students (first_name, last_name, age, location) values ('Zack', 'Mat
 INSERT INTO students (first_name, last_name, age, location) values ('Finn', 'Lam', 25, 'Manila');
 
 UPDATE students
-SET first_name='Ivan' middle_name='Ingram' last_name='Howard' age=25 location='Bulacan'
+SET first_name='Ivan', middle_name='Ingram', last_name='Howard', age=25, location='Bulacan'
 WHERE id=1;
 
 
