@@ -59,3 +59,4 @@ admin = Account.new(JWTAuthentication.new('Admin'))
 admin.login
 user = Account.new(SessionAuthentication.new("User"))
 user.login
+
