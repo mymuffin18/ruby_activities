@@ -1,4 +1,4 @@
-create table students (id SERIAL PRIMARY KEY NOT NULL,
+CREATE TABLE students (id SERIAL PRIMARY KEY NOT NULL,
 					   first_name varchar(255) NOT NULL,
 					   middle_name varchar(255) DEFAULT 'Blank',
 					   last_name varchar(255) NOT NULL,
@@ -6,13 +6,13 @@ create table students (id SERIAL PRIMARY KEY NOT NULL,
 					   location varchar(255) NOT NULL
 					  );
 
-insert into students (first_name, last_name, age, location) values ('Juan', 'Cruz', 18, 'Manila');
-insert into students (first_name, last_name, age, location) values ('Anne', 'Wall', 20, 'Manila');
-insert into students (first_name, last_name, age, location) values ('Theresa', 'Joseph', 21, 'Manila');
+INSERT INTO students (first_name, last_name, age, location) values ('Juan', 'Cruz', 18, 'Manila');
+INSERT INTO students (first_name, last_name, age, location) values ('Anne', 'Wall', 20, 'Manila');
+INSERT INTO students (first_name, last_name, age, location) values ('Theresa', 'Joseph', 21, 'Manila');
 					  
-insert into students (first_name, last_name, age, location) values ('Issac', 'Gray', 19, 'Laguna');
-insert into students (first_name, last_name, age, location) values ('Zack', 'Matthews', 22, 'Marikina');
-insert into students (first_name, last_name, age, location) values ('Finn', 'Lam', 25, 'Manila');
+INSERT INTO students (first_name, last_name, age, location) values ('Issac', 'Gray', 19, 'Laguna');
+INSERT INTO students (first_name, last_name, age, location) values ('Zack', 'Matthews', 22, 'Marikina');
+INSERT INTO students (first_name, last_name, age, location) values ('Finn', 'Lam', 25, 'Manila');
 
 UPDATE students
 SET first_name='Ivan' middle_name='Ingram' last_name='Howard' age=25 location='Bulacan'
