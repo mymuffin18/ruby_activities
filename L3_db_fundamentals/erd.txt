@@ -1,0 +1,146 @@
+
+1.
+SELECT COUNT( DISTINCT inventory_id ) as unique_inventory_rented, COUNT(inventory_id) as total_inventory_rented
+FROM rental;
+
+2.
+SELECT f.title, f.release_year, f.rating, concat(actor.first_name,' ', actor.last_name)actor_fullname from film f
+inner join film_actor fa ON f.film_id=fa.film_id
+inner join actor on actor.actor_id=fa.actor_id
+where (actor.first_name='Dan' AND actor.last_name='Torn') OR (actor.first_name='Dan' AND actor.last_name='Streep')
+order by f.title asc;
+
+3.
+SELECT concat(actor.first_name, ' ', actor.last_name)actor_fullname, f.title, cat.name
+FROM film f
+INNER JOIN film_category fc ON f.film_id=fc.film_id
+INNER JOIN category cat ON fc.category_id=cat.category_id
+INNER JOIN film_actor fa ON f.film_id=fa.film_id
+INNER JOIN actor ON actor.actor_id=fa.actor_id
+WHERE actor.last_name LIKE 'D%' AND cat.name='Comedy'
+ORDER BY actor_fullname ASC;
+
+4.
+SELECT
+	staff_country.staff_full_name,
+	COALESCE(customer_per_country.customer_count, 0) AS customer_count
+
+FROM (
+	SELECT
+		CONCAT(s.first_name, ' ', s.last_name) AS staff_full_name,
+		country.country_id AS country_id
+	FROM	public.staff AS s
+	JOIN	public.store AS store
+	ON	s.store_id = store.store_id
+	JOIN	public.address AS add
+	ON	store.address_id = add.address_id
+	JOIN	public.city AS city
+	ON	add.city_id = city.city_id
+	JOIN	public.country AS country
+	ON	city.country_id = country.country_id
+	GROUP BY
+		staff_full_name,
+		country.country_id
+) AS staff_country
+
+LEFT JOIN (
+	SELECT
+		country.country_id AS country_id,
+		COUNT(c.customer_id) AS customer_count,
+		country.country AS c_name
+	FROM	public.customer AS c
+	JOIN	public.address AS add
+	ON	c.address_id = add.address_id
+	JOIN	public.city AS city
+	ON	add.city_id = city.city_id
+	JOIN	public.country AS country
+	ON	city.country_id = country.country_id
+	GROUP BY
+		country.country_id
+	ORDER BY
+		country.country_id
+) AS customer_per_country
+
+ON
+	staff_country.country_id = customer_per_country.country_id
+
+
+5.
+SELECT
+store.store_id,
+COUNT (film_category.category_id) film_count,
+category.name
+FROM
+category
+FULL OUTER JOIN film_category on film_category.category_id = category.category_id
+FULL OUTER JOIN inventory on inventory.film_id = film_category.film_id
+FULL OUTER JOIN rental on rental.inventory_id = inventory.inventory_id
+FULL OUTER JOIN customer on customer.customer_id = rental.customer_id
+FULL OUTER JOIN store on store.store_id = customer.store_id
+GROUP BY category.name,store.store_id
+HAVING COUNT(film_category.category_id) = 
+(
+	SELECT MAX(a.film_count) from (
+	SELECT
+		store.store_id,
+		COUNT (film_category.category_id) film_count,
+		category.name
+		FROM
+		category
+		FULL OUTER JOIN film_category on film_category.category_id = category.category_id
+		FULL OUTER JOIN inventory on inventory.film_id = film_category.film_id
+		FULL OUTER JOIN rental on rental.inventory_id = inventory.inventory_id
+		FULL OUTER JOIN customer on customer.customer_id = rental.customer_id
+		FULL OUTER JOIN store on store.store_id = customer.store_id
+		GROUP BY category.name,store.store_id) a where a.store_id = 1)
+		
+		OR COUNT(film_category.category_id)=
+		(
+	SELECT MAX(a.film_count) from (
+	SELECT
+		store.store_id,
+		COUNT (film_category.category_id) film_count,
+		category.name
+		FROM
+		category
+		FULL OUTER JOIN film_category on film_category.category_id = category.category_id
+		FULL OUTER JOIN inventory on inventory.film_id = film_category.film_id
+		FULL OUTER JOIN rental on rental.inventory_id = inventory.inventory_id
+		FULL OUTER JOIN customer on customer.customer_id = rental.customer_id
+		FULL OUTER JOIN store on store.store_id = customer.store_id
+		GROUP BY category.name,store.store_id) a where a.store_id = 2)
+
+ORDER BY store.store_id ASC
+
+6.
+SELECT
+country,
+full_name,
+actor_rank,
+rental_count,
+actor_number
+FROM (
+SELECT 
+concat(actor.first_name,' ', actor.last_name) full_name,
+count(rental.rental_id) rental_count,
+country.country country,
+actor.actor_id actor_number,
+RANK() OVER ( 
+	PARTITION BY country.country 
+	ORDER BY COUNT(rental.rental_id) DESC
+) actor_rank
+from
+actor 
+inner join film_actor fa on fa.actor_id = actor.actor_id
+inner join film fi on fi.film_id = fa.film_id
+inner join inventory on fi.film_id = inventory.film_id
+inner join rental on rental.inventory_id = inventory.inventory_id
+inner join customer on customer.customer_id = rental.customer_id
+inner join address on address.address_id = customer.address_id
+inner join city on city.city_id = address.city_id
+inner join country on country.country_id = city.country_id
+group by full_name, country.country, actor_number
+	)a where actor_rank <= 5
+
+
+
